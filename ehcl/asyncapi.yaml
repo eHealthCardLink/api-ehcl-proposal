@@ -279,7 +279,7 @@ components:
   schemas:
     webSocketId:
       type: string
-      description: Identifer for the established web socket connection
+      description: Identifier for the established web socket connection
     cardSessionId:
       type: string
       description: Card session identifier
