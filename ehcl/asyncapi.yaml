@@ -23,6 +23,8 @@ channels:
   cardExchange:
     address: /
     messages:
+      sessionInformationMessage:
+        $ref: '#/components/messages/sessionInformationMessage'
       registerEgkMessage:
         $ref: '#/components/messages/registerEgkMessage'
       sendApduMessage:
@@ -46,6 +48,14 @@ channels:
               type: string
               description: webSocketId
 operations:
+  sendSessionInformationMessage:
+    action: send
+    title: Session Information
+    summary: Send Session Information for the opened connection to the client (app)
+    channel:
+      $ref: '#/channels/cardExchange'
+    messages:
+      - $ref: '#/channels/cardExchange/messages/sessionInformationMessage'
   receiveRegisterEgkMessage:
     action: receive
     title: Receive eGK message
@@ -106,6 +116,28 @@ operations:
       - $ref: '#/channels/cardExchange/messages/genericErrorMessage'
 components:
   messages:
+    sessionInformationMessage:
+      name: sessionInformationMessage
+      title: Session Information Message
+      summary: Information about the (re-)established session
+      contentType: application/json
+      payload:
+        type: array
+        items:
+          oneOf:
+            - $ref: '#/components/schemas/sessionInformationEnvelope'
+            - $ref: '#/components/schemas/cardSessionId'
+            - $ref: '#/components/schemas/correlationId'
+        minItems: 1
+        maxItems: 1
+      examples:
+        - name: sessionInformation
+          summary: sessionInformation message
+          payload:
+            - type: sessionInformation
+              payload:
+                webSocketId: 3509584a-04e7-4756-bab0-0da4a84d0c12
+                phoneRegistered: false
     registerEgkMessage:
       name: send
       title: send
@@ -233,6 +265,27 @@ components:
     genericErrorPayload:
       type: object
       description: Base64 encoded json payload of the error
+    sessionInformationEnvelope:
+      type: object
+      properties:
+        type:
+          type: string
+          const: sessionInformation
+        payload:
+          $ref: '#/components/schemas/sessionInformationPayload'
+    sessionInformationPayload:
+      type: object
+      description: Session Information object
+      required:
+        - webSocketId
+      properties:
+        webSocketId:
+          $ref: '#/components/schemas/webSocketId'
+          description: The session ID chosen by the server for this WS channel
+        phoneRegistered:
+          type: boolean
+          default: false
+          description: Indicator whether the phone number of the user has been registered already in this session
     registerEgkEnvelope:
       type: object
       properties:
