@@ -49,6 +49,9 @@ channels:
             token:
               type: string
               description: webSocketId
+            version:
+              type: string
+              description: Version of the API required by the client
 operations:
   sendSessionInformationMessage:
     action: send
