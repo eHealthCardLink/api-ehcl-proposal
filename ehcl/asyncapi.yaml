@@ -25,6 +25,10 @@ channels:
     messages:
       sessionInformationMessage:
         $ref: '#/components/messages/sessionInformationMessage'
+      requestSMSCodeMessage:
+        $ref: '#/components/messages/requestSMSCodeMessage'
+      requestSMSCodeResponseMessage:
+        $ref: '#/components/messages/requestSMSCodeResponseMessage'
       registerEgkMessage:
         $ref: '#/components/messages/registerEgkMessage'
       registerEgkFinishMessage:
@@ -61,6 +65,22 @@ operations:
       $ref: '#/channels/cardExchange'
     messages:
       - $ref: '#/channels/cardExchange/messages/sessionInformationMessage'
+  receiveRequestSMSCodeMessage:
+    action: receive
+    title: Receive request SMS Code
+    summary: Receive request SMS Code for the opened connection from the client (app)
+    channel:
+      $ref: '#/channels/cardExchange'
+    messages:
+      - $ref: '#/channels/cardExchange/messages/requestSMSCodeMessage'
+  sendRequestSMSCodeResponseMessage:
+    action: send
+    title: Send request SMS Code Response
+    summary: Send request SMS Code Response for the opened connection to the client (app)
+    channel:
+      $ref: '#/channels/cardExchange'
+    messages:
+      - $ref: '#/channels/cardExchange/messages/requestSMSCodeResponseMessage'
   receiveRegisterEgkMessage:
     action: receive
     title: Receive eGK message
@@ -151,6 +171,55 @@ components:
               payload:
                 webSocketId: 3509584a-04e7-4756-bab0-0da4a84d0c12
                 phoneRegistered: false
+    requestSMSCodeMessage:
+      name: requestSMSCodeMessage
+      title: Request SMS Code Message
+      summary: Request SMS code validation for a given phone number
+      contentType: application/json
+      payload:
+        type: array
+        items:
+          oneOf:
+            - $ref: '#/components/schemas/requestSMSCodeEnvelope'
+            - $ref: '#/components/schemas/cardSessionId'
+            - $ref: '#/components/schemas/correlationId'
+        minItems: 1
+        maxItems: 3
+      examples:
+        - name: requestSMSCode
+          summary: requestSMSCode message
+          payload:
+            - type: requestSMSCode
+              payload:
+                phoneNumber: +49 (175) 142 126 92
+    requestSMSCodeResponseMessage:
+      name: requestSMSCodeResponseMessage
+      title: Request SMS Code Response Message
+      summary: Response for requesting an SMS code validation for a given phone number
+      contentType: application/json
+      payload:
+        type: array
+        items:
+          oneOf:
+            - $ref: '#/components/schemas/requestSMSCodeResponseEnvelope'
+            - $ref: '#/components/schemas/cardSessionId'
+            - $ref: '#/components/schemas/correlationId'
+        minItems: 3
+        maxItems: 3
+      examples:
+        - name: requestSMSCodeResponse success
+          summary: requestSMSCodeResponse message
+          payload:
+            - type: requestSMSCodeResponse
+              payload:
+                resultCode: SUCCESS
+        - name: requestSMSCodeResponse error
+          summary: requestSMSCodeResponse message
+          payload:
+            - type: requestSMSCodeResponse
+              payload:
+                resultCode: NUMBER_FROM_WRONG_COUNTRY
+                errorMessage: The provided number is not from Germany
     registerEgkMessage:
       name: send
       title: send
@@ -313,6 +382,52 @@ components:
           type: boolean
           default: false
           description: Indicator whether the phone number of the user has been registered already in this session
+    requestSMSCodeEnvelope:
+      type: object
+      properties:
+        type:
+          type: string
+          const: requestSMSCode
+        payload:
+          $ref: '#/components/schemas/requestSMSCodePayload'
+    requestSMSCodePayload:
+      type: object
+      description: Request SMS Code Payload object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+          description: The phone number where the SMS code should be sent to
+    requestSMSCodeResponseEnvelope:
+      type: object
+      properties:
+        type:
+          type: string
+          const: requestSMSCodeResponse
+        payload:
+          $ref: '#/components/schemas/requestSMSCodeResponsePayload'
+    requestSMSCodeResponsePayload:
+      type: object
+      description: Request SMS Code Payload Response object
+      required:
+        - resultCode
+      properties:
+        resultCode:
+          $ref: '#/components/schemas/smsCodeResultType'
+          description: Result code for SMS Code responses
+        errorMessage:
+          type: string
+          description: Error message in case of an error
+    smsCodeResultType:
+      type: string
+      enum:
+        - SUCCESS
+        - NUMBER_FROM_WRONG_COUNTRY
+        - TAN_EXPIRED
+        - TAN_INCORRECT
+        - TAN_RETRY_LIMIT_EXCEEDED
+        - UNKNOWN_ERROR
     registerEgkEnvelope:
       type: object
       properties:
