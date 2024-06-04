@@ -354,51 +354,49 @@ components:
             - $ref: '#/components/schemas/correlationId'
         minItems: 3
         maxItems: 3
+
     sendApduMessage:
       name: receive
       title: receive
       summary: Token to be signed
       contentType: application/json
       payload:
-        type: array
-        items:
-          allOf:
-            - $ref: '#/components/schemas/sendApduEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 3
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/cardSessionTrait'
+          - $ref: '#/components/schemas/sendApdu'
       examples:
         - name: sendAPDU
           summary: sendAPDU message
           payload:
-            - type: sendAPDU
-              payload: >-
-                eyJjYXJkU2Vzc2lvbklkIjoiMzUwOTU4NGEtMDRlNy00NzU2LWJhYjAtMGRhNGE4NGQwYzEyIiwiYXBkdSI6IkFJZ0FBQmlBSjJpQkdabVpsb05wRDdiRDI3RWgweTFrbVV0RDN0a0EifQ==
-            - 3509584a-04e7-4756-bab0-0da4a84d0c12
-            - 38a5fb1b-f8e4-4132-8ec6-00fcd07bc5cc
+            messageId: 3509584a-04e7-4756-bab0-0da4a84d0c12
+            cardSessionId: 38a5fb1b-f8e4-4132-8ec6-00fcd07bc5cc
+            type: sendAPDU
+            apdu: AIgAABiAJ2iBGZmZloNpD7bD27Eh0y1kmUtD3tkA
+
     sendApduResponseMessage:
       name: send
       title: send
       summary: APDU from card to processing component
       contentType: application/json
       payload:
-        type: array
+        type: object
         allOf:
-          - $ref: '#/components/schemas/sendApduResponseEnvelope'
-          - $ref: '#/components/schemas/cardSessionId'
-          - $ref: '#/components/schemas/correlationId'
-        minItems: 3
-        maxItems: 3
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/correlationIdTrait'
+          - $ref: '#/components/schemas/cardSessionTrait'
+          - $ref: '#/components/schemas/sendApduResponse'
       examples:
         - name: sendAPDUResponse
           summary: sendAPDUResponse message
           payload:
-            - type: sendAPDUResponse
-              payload: >-
-                eyJjYXJkU2Vzc2lvbklkIjoiMzUwOTU4NGEtMDRlNy00NzU2LWJhYjAtMGRhNGE4NGQwYzEyIiwicmVzcG9uc2UiOiJrYk5BSzR4djRueXZ3RU80ZndnbVptbkZud0dTYjIrV0RmdEpxMlN1czBsd3g1clFVUTl0cTBRMXFLd2x5anhwYUFMMENTSjFnV1JWUWtmVnpvWXh4WkFBIn0=
-            - 3509584a-04e7-4756-bab0-0da4a84d0c12
-            - 38a5fb1b-f8e4-4132-8ec6-00fcd07bc5cc
+            messageId: 02774740-35dc-460a-b7dc-b5d076b382c3
+            correlationId: 3509584a-04e7-4756-bab0-0da4a84d0c12
+            cardSessionId: 38a5fb1b-f8e4-4132-8ec6-00fcd07bc5cc
+            type: sendAPDUResponse
+            responseApdu: kbNAK4xv4nyvwEO4fwgmZmnFnwGSb2+WDftJq2Sus0lwx5rQUQ9tq0Q1qKwlyjxpaAL0CSJ1gWRVQkfVzoYxxZAA
+
     tasklistErrorMessage:
       name: receive
       title: receive
@@ -612,22 +610,7 @@ components:
           const: registerEGKFinish
         payload:
           $ref: '#/components/schemas/registerEgkFinishPayload'
-    sendApduEnvelope:
-      type: object
-      properties:
-        type:
-          type: string
-          const: sendAPDU
-        payload:
-          $ref: '#/components/schemas/sendApduPayload'
-    sendApduResponseEnvelope:
-      type: object
-      properties:
-        type:
-          type: string
-          const: sendAPDUResponse
-        payload:
-          $ref: '#/components/schemas/sendApduResponsePayload'
+
     tasklistErrorEnvelope:
       type: object
       properties:
@@ -688,34 +671,37 @@ components:
           default: true
           description: Indicator whether the card should be removed from the card reader
       contentType: application/json
-    sendApduPayload:
+
+    sendApdu:
       type: object
       required:
-        - cardSessionId
+        - type
         - apdu
-      description: Base64 encoded json payload
+      description: Type for sending an APDU to the card
       properties:
-        cardSessionId:
-          $ref: '#/components/schemas/cardSessionId'
+        type:
+          type: string
+          const: sendAPDU
         apdu:
           type: string
           format: byte
           description: APDU to be forwarded to the card
-      contentType: application/json
-    sendApduResponsePayload:
+
+    sendApduResponse:
       type: object
       required:
-        - cardSessionId
-        - response
-      description: Base64 encoded json payload
+        - type
+        - responseApdu
+      description: Type for receiving a Response APDU from the card
       properties:
-        cardSessionId:
-          $ref: '#/components/schemas/cardSessionId'
-        response:
+        type:
+          type: string
+          const: sendAPDUResponse
+        responseApdu:
           type: string
           format: byte
           description: Response APDU from card/app to bridge
-      contentType: application/json
+
     tasklistErrorPayload:
       type: object
       required:
