@@ -450,12 +450,39 @@ components:
     webSocketId:
       type: string
       description: Identifier for the established web socket connection
+
     cardSessionId:
       type: string
       description: Card session identifier
-    correlationId:
+    cardSessionTrait:
+      type: object
+      required:
+        - cardSessionId
+      properties:
+        cardSessionId:
+          $ref: '#/components/schemas/cardSessionId'
+
+    messageId:
       type: string
+      description: Message identifier
+    messageIdTrait:
+      type: object
+      required:
+        - messageId
+      properties:
+        messageId:
+          $ref: '#/components/schemas/messageId'
+    correlationId:
       description: CorrelationId
+      $ref: '#/components/schemas/messageId'
+    correlationIdTrait:
+      type: object
+      required:
+        - correlationId
+      properties:
+        correlationId:
+          $ref: '#/components/schemas/correlationId'
+
     genericErrorPayload:
       type: object
       description: Base64 encoded json payload of the error
