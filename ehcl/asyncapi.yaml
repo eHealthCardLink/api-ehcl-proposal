@@ -47,8 +47,6 @@ channels:
         $ref: '#/components/messages/sendApduResponseMessage'
       tasklistErrorMessage:
         $ref: '#/components/messages/tasklistErrorMessage'
-      invalidPayloadErrorMessage:
-        $ref: '#/components/messages/invalidPayloadErrorMessage'
       genericErrorMessage:
         $ref: '#/components/messages/genericErrorMessage'
     bindings:
@@ -152,14 +150,6 @@ operations:
       $ref: '#/channels/cardExchange'
     messages:
       - $ref: '#/channels/cardExchange/messages/tasklistErrorMessage'
-  sendInvalidPayloadErrorMessage:
-    action: send
-    title: Invalid Payload
-    summary: Provided payload did not pass validation
-    channel:
-      $ref: '#/channels/cardExchange'
-    messages:
-      - $ref: '#/channels/cardExchange/messages/invalidPayloadErrorMessage'
   sendGenericErrorMessage:
     action: send
     title: Generic Error
@@ -396,34 +386,43 @@ components:
       summary: Error retrieving PN
       contentType: application/json
       payload:
-        $ref: '#/components/schemas/tasklistErrorEnvelope'
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/correlationIdTrait'
+          - $ref: '#/components/schemas/cardSessionTrait'
+          - $ref: '#/components/schemas/tasklistError'
       examples:
         - name: tasklistErrorMessage
-          summary: tasklistErrormessage example
+          summary: tasklist Error message example
           payload:
-            type: receiveTasklistError
-            payload: >-
-              eyJjYXJkU2Vzc2lvbklkIjoiNTJiY2RiYzItMjU1Mi00YzVlLWE4ODQtZWMwM2YxYWUxZjIxIiwic3RhdHVzIjo1MDAsInRpc3RhdHVzIjoiNTAwIiwiZXJyb3JtZXNzYWdlIjoiUmVhZFZTRCBFcnJvciJ9
+            messageId: 54200292-c442-4b1a-a1c1-83cfb596b72c
+            correlationId: f1f7bdb6-7562-4152-b636-9f75ca5fb7b1
+            cardSessionId: 3509584a-04e7-4756-bab0-0da4a84d0c12
+            type: tasklistError
+            status: 500
+            tiStatus: 500
+            errorMessage: ReadVSD Error
 
-    invalidPayloadErrorMessage:
-      name: error
-      title: error
-      contentType: text/plain
-      payload:
-        type: string
-        description: Validation result
     genericErrorMessage:
       name: error
       title: error
       contentType: application/json
       payload:
-        type: array
-        items:
-          allOf:
-            - $ref: '#/components/schemas/genericErrorPayload'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/correlationIdOptionalTrait'
+          - $ref: '#/components/schemas/genericError'
+      examples:
+        - name: genericErrorMessage
+          summary: generic Error message example
+          payload:
+            messageId: 54200292-c442-4b1a-a1c1-83cfb596b72c
+            correlationId: f1f7bdb6-7562-4152-b636-9f75ca5fb7b1
+            type: genericError
+            errorCode: INVALID_MESSAGE_DATA
+            errorMessage: Received payload is missing field XYZ.
 
   messageTraits:
     commonHeaders:
@@ -473,10 +472,47 @@ components:
       properties:
         correlationId:
           $ref: '#/components/schemas/correlationId'
-
-    genericErrorPayload:
+    correlationIdOptionalTrait:
       type: object
-      description: Base64 encoded json payload of the error
+      properties:
+        correlationId:
+          $ref: '#/components/schemas/correlationId'
+
+    genericError:
+      type: object
+      description: Base type for error messages
+      allOf:
+        - $ref: '#/components/schemas/genericErrorBase'
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          const: genericError
+    genericErrorBase:
+      type: object
+      description: Base type for error messages
+      required:
+        - errorCode
+        - errorMessage
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/genericErrorResultType'
+          description: Error code describing the error in more detail
+        errorMessage:
+          type: string
+          description: Error message describing the error in more detail
+    genericErrorResultType:
+      type: string
+      enum:
+        - INVALID_MESSAGE_DATA
+        - TI_UNAVAILABLE
+        - TI_SERVICE_ERROR
+        - CARD_EXPIRED
+        - CARD_REVOKED
+        - CARD_INVALID
+        - CARD_ERROR
+        - UNKNOWN_ERROR
 
     sessionStatus:
       type: object
@@ -574,15 +610,6 @@ components:
           type: string
           const: ICCSNReassignment
 
-    tasklistErrorEnvelope:
-      type: object
-      properties:
-        type:
-          type: string
-          const: receiveTasklistError
-        payload:
-          $ref: '#/components/schemas/tasklistErrorPayload'
-
     registerEgk:
       type: object
       required:
@@ -628,7 +655,7 @@ components:
           description: Data from EF.ATR
     registerEgkFinish:
       type: object
-      description: COnclusion message type of the eGK registration.
+      description: Conclusion message type of the eGK registration.
       required:
         - type
       properties:
@@ -670,25 +697,19 @@ components:
           format: byte
           description: Response APDU from card/app to bridge
 
-    tasklistErrorPayload:
+    tasklistError:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/genericErrorBase'
       required:
-        - cardSessionId
-        - status
-      description: Base64 encoded json payload
+        - type
       properties:
-        cardSessionId:
-          $ref: '#/components/schemas/cardSessionId'
-        status:
-          type: integer
-          description: Error Code
-        tistatus:
+        type:
           type: string
-          description: Responsecode from a TI service or connector
-        rootcause:
+          const: tasklistError
+        tiStatus:
           type: string
-          description: RootCause of the error
-        errormessage:
+          description: Response code from a TI service or connector
+        rootCause:
           type: string
-          description: Error message
-      contentType: application/json
+          description: Root cause of the error
