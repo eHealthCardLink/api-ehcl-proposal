@@ -416,6 +416,7 @@ components:
             - $ref: '#/components/schemas/cardSessionId'
             - $ref: '#/components/schemas/correlationId'
         maxItems: 3
+
   messageTraits:
     commonHeaders:
       headers:
@@ -426,7 +427,8 @@ components:
   correlationIds:
     default:
       description: Default Correlation ID
-      location: $message.header#/correlationId
+      location: $message.payload#/correlationId
+
   schemas:
     webSocketId:
       type: string
