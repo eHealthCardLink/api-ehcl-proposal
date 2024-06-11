@@ -37,14 +37,14 @@ channels:
         $ref: '#/components/messages/confirmSMSCodeResponseMessage'
       ICCSNReassignmentMessage:
         $ref: '#/components/messages/ICCSNReassignmentMessage'
-      registerEgkMessage:
-        $ref: '#/components/messages/registerEgkMessage'
-      registerEgkFinishMessage:
-        $ref: '#/components/messages/registerEgkFinishMessage'
-      sendApduMessage:
-        $ref: '#/components/messages/sendApduMessage'
-      sendApduResponseMessage:
-        $ref: '#/components/messages/sendApduResponseMessage'
+      registerEGKMessage:
+        $ref: '#/components/messages/registerEGKMessage'
+      registerEGKFinishMessage:
+        $ref: '#/components/messages/registerEGKFinishMessage'
+      sendAPDUMessage:
+        $ref: '#/components/messages/sendAPDUMessage'
+      sendAPDUResponseMessage:
+        $ref: '#/components/messages/sendAPDUResponseMessage'
       tasklistErrorMessage:
         $ref: '#/components/messages/tasklistErrorMessage'
       genericErrorMessage:
@@ -110,38 +110,38 @@ operations:
       $ref: '#/channels/cardExchange'
     messages:
       - $ref: '#/channels/cardExchange/messages/ICCSNReassignmentMessage'
-  receiveRegisterEgkMessage:
+  receiveRegisterEGKMessage:
     action: receive
     title: Receive eGK message
     summary: Receive eGK message from client (app)
     channel:
       $ref: '#/channels/cardExchange'
     messages:
-      - $ref: '#/channels/cardExchange/messages/registerEgkMessage'
-  sendRegisterEgkFinishMessage:
+      - $ref: '#/channels/cardExchange/messages/registerEGKMessage'
+  sendRegisterEGKFinishMessage:
     action: send
     title: Send eGK finished message
     summary: Send eGK finished message to client (app)
     channel:
       $ref: '#/channels/cardExchange'
     messages:
-      - $ref: '#/channels/cardExchange/messages/registerEgkFinishMessage'
-  sendSendApduMessage:
+      - $ref: '#/channels/cardExchange/messages/registerEGKFinishMessage'
+  sendSendAPDUMessage:
     action: send
     title: Send APDU message
     summary: Send APDU to app (INTERNAL AUTHENTICATE)
     channel:
       $ref: '#/channels/cardExchange'
     messages:
-      - $ref: '#/channels/cardExchange/messages/sendApduMessage'
-  receiveSendApduResponseMessage:
+      - $ref: '#/channels/cardExchange/messages/sendAPDUMessage'
+  receiveSendAPDUResponseMessage:
     action: receive
     title: Receive APDU response from app
     summary: INTERNAL AUTHENTICATE response
     channel:
       $ref: '#/channels/cardExchange'
     messages:
-      - $ref: '#/channels/cardExchange/messages/sendApduResponseMessage'
+      - $ref: '#/channels/cardExchange/messages/sendAPDUResponseMessage'
   sendTasklistErrorMessage:
     action: send
     title: Error message to app
@@ -275,7 +275,7 @@ components:
       title: Notify user af reassigned ICCSN
       summary: >
         Notification for the user that the previously paired Phone Number is used with a new eGK.
-        This message is correlated to the registerEgk message.
+        This message is correlated to the registerEGK message.
       contentType: application/json
       payload:
         type: object
@@ -291,7 +291,7 @@ components:
             correlationId: f1f7bdb6-7562-4152-b636-9f75ca5fb7b1
             type: ICCSNReassignment
 
-    registerEgkMessage:
+    registerEGKMessage:
       name: send
       title: send
       summary: Card data
@@ -301,7 +301,7 @@ components:
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/registerEgk'
+          - $ref: '#/components/schemas/registerEGK'
       examples:
         - name: registerEGK
           summary: registerEGK message
@@ -316,8 +316,8 @@ components:
             x509AuthECC: MIIDaDCCAw6gAwIBAgIDL9AHMAoGCCqGSM49BAMCMIGsMQswCQYDVQQGEwJERTEzMDEGA1UECgwqQXRvcyBJbmZvcm1hdGlvbiBUZWNobm9sb2d5IEdtYkggTk9ULVZBTElEMUUwQwYDVQQLDDxFbGVrdHJvbmlzY2hlIEdlc3VuZGhlaXRza2FydGUtQ0EgZGVyIFRlbGVtYXRpa2luZnJhc3RydWt0dXIxITAfBgNVBAMMGEFUT1MuRUdLLUNBMjA1IFRFU1QtT05MWTAeFw0yMzA0MjAxMTM4MDNaFw0yODA0MjAxMTM4MDNaMIGRMQswCQYDVQQGEwJERTEfMB0GA1UECgwWQU9LIEJhZGVuLVfDvHJ0dGVtYmVyZzESMBAGA1UECwwJMTA4MDE4MDA3MRMwEQYDVQQLDApUMDQ5OTA0NzI3MQ8wDQYDVQQEDAZEZXBqcGkxDzANBgNVBCoMBkthZ3V4aTEWMBQGA1UEAwwNRGVwanBpIEthZ3V4aTBaMBQGByqGSM49AgEGCSskAwMCCAEBBwNCAARG\/zHjer2JVpNi8fGLw1TY8UV0jC5OIy3EbPSKYzEY4wj1wu1Uxmz0qhAvuCTTm9dHOakL52PtwiV4\/FB0\/TuOo4IBNTCCATEwHQYDVR0OBBYEFJSkc+7NAvhG3r3+nyGfd7G4MfDeMA4GA1UdDwEB\/wQEAwIHgDAMBgNVHRMBAf8EAjAAMFEGA1UdIARKMEgwCQYHKoIUAEwERjA7BggqghQATASBIzAvMC0GCCsGAQUFBwIBFiFodHRwOi8vd3d3LmdlbWF0aWsuZGUvZ28vcG9saWNpZXMwNwYIKwYBBQUHAQEEKzApMCcGCCsGAQUFBzABhhtodHRwOi8vb2NzcC5lZ2stdGVzdC10c3AuZGUwHwYDVR0jBBgwFoAURqP5XidowY\/nZ0xQaiQfG21t9lwwEwYDVR0lBAwwCgYIKwYBBQUHAwIwMAYFKyQIAwMEJzAlMCMwITAfMB0wEAwOVmVyc2ljaGVydGUvLXIwCQYHKoIUAEwEMTAKBggqhkjOPQQDAgNIADBFAiEAhYTKDwLokoIlbKQy9thUIDv\/CrY5iDHISeTy8sA5FYwCIDxpbggG3wO7wY\/E2\/ZP9af3jP2YroCBqQUATqsnaFef
             cvcAuth: fyGB2n9OgZNfKQFwQghERUFUWBYCIX9JSwYGKyQDBQMBhkEEIX4kJxFM3ncGzbBV+TZfdzUHlS\/\/OAYnrLLNtHgGKo4SbohQIub0eJ6484BhkT0akp68+388VX97n01Gqu+7Sl8gDAAJgCdogRmZmZaDaX9MEwYIKoIUAEwEgRhTBwAAAAAAAABfJQYCAwAEAgBfJAYCCAAEAgBfN0CK7Ifm998wVduqvBm03qgkdorMRtkxS\/E91Qg5a6Xy\/IccOE5Er12C4FLS8BF+7cpj2aV5PzJm1B0uW7XRK\/Xj
             cvcCA: fyGB2H9OgZFfKQFwQghERUdYWIYCIH9JTQYIKoZIzj0EAwKGQQRj3tNdi\/J0Zsxh+SkGS5Duab\/mFnzcJuXWoCV7bXO8N6kx5iq1XxHnvSp7hIzi0Eo97jpFpBkl8dVnURuAfEK3XyAIREVBVFgWAiF\/TBMGCCqCFABMBIEYUweAAAAAAAAAXyUGAgEAAgEHXyQGAgkAAgEGXzdAe4\/gFwTxqg8I9W4qgjVp\/98bF2Djo4Z\/\/wdaRx14lYhu2YFdlH+pZpbrphKeRELUBfjtIdE53Z2w1dIP2G6KUw==
-    registerEgkFinishMessage:
-      name: registerEgkFinishMessage
+    registerEGKFinishMessage:
+      name: registerEGKFinishMessage
       title: Register eGK Finish Message
       summary: Finish message for eGK registration
       contentType: application/json
@@ -327,7 +327,7 @@ components:
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/registerEgk'
+          - $ref: '#/components/schemas/registerEGK'
       examples:
         - name: registerEGKFinish
           summary: registerEGKFinish message
@@ -338,7 +338,7 @@ components:
             type: registerEGKFinish
             removeCard: true
 
-    sendApduMessage:
+    sendAPDUMessage:
       name: receive
       title: receive
       summary: Token to be signed
@@ -348,7 +348,7 @@ components:
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/sendApdu'
+          - $ref: '#/components/schemas/sendAPDU'
       examples:
         - name: sendAPDU
           summary: sendAPDU message
@@ -358,7 +358,7 @@ components:
             type: sendAPDU
             apdu: AIgAABiAJ2iBGZmZloNpD7bD27Eh0y1kmUtD3tkA
 
-    sendApduResponseMessage:
+    sendAPDUResponseMessage:
       name: send
       title: send
       summary: APDU from card to processing component
@@ -369,7 +369,7 @@ components:
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/sendApduResponse'
+          - $ref: '#/components/schemas/sendAPDUResponse'
       examples:
         - name: sendAPDUResponse
           summary: sendAPDUResponse message
@@ -610,7 +610,7 @@ components:
           type: string
           const: ICCSNReassignment
 
-    registerEgk:
+    registerEGK:
       type: object
       required:
         - type
@@ -653,7 +653,7 @@ components:
           type: string
           format: byte
           description: Data from EF.ATR
-    registerEgkFinish:
+    registerEGKFinish:
       type: object
       description: Conclusion message type of the eGK registration.
       required:
@@ -667,7 +667,7 @@ components:
           default: true
           description: Indicator whether the card should be removed from the card reader
 
-    sendApdu:
+    sendAPDU:
       type: object
       required:
         - type
@@ -682,7 +682,7 @@ components:
           format: byte
           description: APDU to be forwarded to the card
 
-    sendApduResponse:
+    sendAPDUResponse:
       type: object
       required:
         - type
