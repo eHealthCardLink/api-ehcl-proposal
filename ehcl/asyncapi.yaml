@@ -170,8 +170,8 @@ components:
         title: sessionStatusMessage
         type: object
         allOf:
-          - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/sessionStatus'
+          - $ref: '#/components/schemas/messageIdTrait'
       examples:
         - name: sessionStatus
           summary: sessionStatus message
@@ -190,8 +190,8 @@ components:
         title: requestSMSCodeMessage
         type: object
         allOf:
-          - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/requestSMSCode'
+          - $ref: '#/components/schemas/messageIdTrait'
       examples:
         - name: requestSMSCode
           summary: requestSMSCode message
@@ -208,9 +208,9 @@ components:
         title: requestSMSCodeResponseMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/requestSMSCodeResponse'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
-          - $ref: '#/components/schemas/requestSMSCodeResponse'
       examples:
         - name: requestSMSCodeResponse success
           summary: requestSMSCodeResponse message
@@ -237,8 +237,8 @@ components:
         title: confirmSMSCodeMessage
         type: object
         allOf:
-          - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/confirmSMSCode'
+          - $ref: '#/components/schemas/messageIdTrait'
       examples:
         - name: confirmSMSCode
           summary: confirmSMSCode message
@@ -255,9 +255,9 @@ components:
         title: confirmSMSCodeResponseMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/confirmSMSCodeResponse'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
-          - $ref: '#/components/schemas/confirmSMSCodeResponse'
       examples:
         - name: confirmSMSCodeResponse success
           summary: confirmSMSCodeResponse message
@@ -286,9 +286,9 @@ components:
         title: ICCSNReassignmentMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/ICCSNReassignment'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
-          - $ref: '#/components/schemas/ICCSNReassignment'
       examples:
         - name: ICCSNReassignment
           summary: ICCSNReassignment message
@@ -306,9 +306,9 @@ components:
         title: registerEGKMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/registerEGK'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/registerEGK'
       examples:
         - name: registerEGK
           summary: registerEGK message
@@ -332,10 +332,10 @@ components:
         title: registerEGKFinishMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/registerEGK'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/registerEGK'
       examples:
         - name: registerEGKFinish
           summary: registerEGKFinish message
@@ -355,9 +355,9 @@ components:
         title: sendAPDUMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/sendAPDU'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/sendAPDU'
       examples:
         - name: sendAPDU
           summary: sendAPDU message
@@ -376,10 +376,10 @@ components:
         title: sendAPDUResponseMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/sendAPDUResponse'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/sendAPDUResponse'
       examples:
         - name: sendAPDUResponse
           summary: sendAPDUResponse message
@@ -399,10 +399,10 @@ components:
         title: tasklistErrorMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/tasklistError'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
-          - $ref: '#/components/schemas/tasklistError'
       examples:
         - name: tasklistErrorMessage
           summary: tasklist Error message example
@@ -423,9 +423,9 @@ components:
         title: genericErrorMessage
         type: object
         allOf:
+          - $ref: '#/components/schemas/genericError'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdOptionalTrait'
-          - $ref: '#/components/schemas/genericError'
       examples:
         - name: genericErrorMessage
           summary: generic Error message example
