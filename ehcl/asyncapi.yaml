@@ -47,8 +47,6 @@ channels:
         $ref: '#/components/messages/sendApduResponseMessage'
       tasklistErrorMessage:
         $ref: '#/components/messages/tasklistErrorMessage'
-      readyMessage:
-        $ref: '#/components/messages/readyMessage'
       invalidPayloadErrorMessage:
         $ref: '#/components/messages/invalidPayloadErrorMessage'
       genericErrorMessage:
@@ -154,16 +152,6 @@ operations:
       $ref: '#/channels/cardExchange'
     messages:
       - $ref: '#/channels/cardExchange/messages/tasklistErrorMessage'
-  sendReadyMessage:
-    action: send
-    title: Ready notification
-    summary: >-
-      Notification indicating to app that session is ready and eGK data can be
-      sent
-    channel:
-      $ref: '#/channels/cardExchange'
-    messages:
-      - $ref: '#/channels/cardExchange/messages/readyMessage'
   sendInvalidPayloadErrorMessage:
     action: send
     title: Invalid Payload
@@ -416,9 +404,7 @@ components:
             type: receiveTasklistError
             payload: >-
               eyJjYXJkU2Vzc2lvbklkIjoiNTJiY2RiYzItMjU1Mi00YzVlLWE4ODQtZWMwM2YxYWUxZjIxIiwic3RhdHVzIjo1MDAsInRpc3RhdHVzIjoiNTAwIiwiZXJyb3JtZXNzYWdlIjoiUmVhZFZTRCBFcnJvciJ9
-    readyMessage:
-      name: ready
-      title: ready
+
     invalidPayloadErrorMessage:
       name: error
       title: error
