@@ -285,22 +285,24 @@ components:
     ICCSNReassignmentMessage:
       name: ICCSNReassignmentMessage
       title: Notify user af reassigned ICCSN
-      summary: Notification for the user that the previously paired Phone Number is used with a new eGK
+      summary: >
+        Notification for the user that the previously paired Phone Number is used with a new eGK.
+        This message is correlated to the registerEgk message.
       contentType: application/json
       payload:
-        type: array
-        items:
-          oneOf:
-            - $ref: '#/components/schemas/ICCSNReassignmentEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 3
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/correlationIdTrait'
+          - $ref: '#/components/schemas/ICCSNReassignment'
       examples:
         - name: ICCSNReassignment
           summary: ICCSNReassignment message
           payload:
-            - type: ICCSNReassignment
+            messageId: 559ebb3e-f215-4836-8a65-6f83e531d568
+            correlationId: f1f7bdb6-7562-4152-b636-9f75ca5fb7b1
+            type: ICCSNReassignment
+
     registerEgkMessage:
       name: send
       title: send
@@ -556,8 +558,11 @@ components:
         - TAN_RETRY_LIMIT_EXCEEDED
         - UNKNOWN_ERROR
 
-    ICCSNReassignmentEnvelope:
+    ICCSNReassignment:
       type: object
+      description: ICCSN Reassignment object, indicating to the user, that the ICCSN-Phone association has changed.
+      required:
+        - type
       properties:
         type:
           type: string
