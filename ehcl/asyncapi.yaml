@@ -216,6 +216,7 @@ components:
         - name: requestSMSCode
           summary: requestSMSCode message
           payload:
+            messageId: e9a148b9-e70a-498e-af0e-358c8226cae8
             type: requestSMSCode
             phoneNumber: +49 (175) 142 126 92
     requestSMSCodeResponseMessage:
@@ -233,11 +234,15 @@ components:
         - name: requestSMSCodeResponse success
           summary: requestSMSCodeResponse message
           payload:
+            messageId: 3257f31c-89c7-4d96-9e0f-11c7d79e0b6e
+            correlationId: e9a148b9-e70a-498e-af0e-358c8226cae8
             type: requestSMSCodeResponse
             resultCode: SUCCESS
         - name: requestSMSCodeResponse error
           summary: requestSMSCodeResponse message
           payload:
+            messageId: 3257f31c-89c7-4d96-9e0f-11c7d79e0b6e
+            correlationId: e9a148b9-e70a-498e-af0e-358c8226cae8
             type: requestSMSCodeResponse
             resultCode: NUMBER_FROM_WRONG_COUNTRY
             errorMessage: The provided number is not from Germany
@@ -256,6 +261,7 @@ components:
         - name: confirmSMSCode
           summary: confirmSMSCode message
           payload:
+            messageId: b82c6017-430c-48e0-a002-a92fb0e18b14
             type: confirmSMSCode
             smsCode: 123456
     confirmSMSCodeResponseMessage:
@@ -273,11 +279,15 @@ components:
         - name: confirmSMSCodeResponse success
           summary: confirmSMSCodeResponse message
           payload:
+            messageId: c8163bf7-9f67-4b62-97e5-83129bda4422
+            correlationId: b82c6017-430c-48e0-a002-a92fb0e18b14
             type: confirmSMSCodeResponse
             resultCode: SUCCESS
         - name: confirmSMSCodeResponse error
           summary: confirmSMSCodeResponse message
           payload:
+            messageId: c8163bf7-9f67-4b62-97e5-83129bda4422
+            correlationId: b82c6017-430c-48e0-a002-a92fb0e18b14
             type: confirmSMSCodeResponse
             resultCode: TAN_RETRY_LIMIT_EXCEEDED
             errorMessage: The SMS code has been entered wrong too many times
