@@ -482,14 +482,14 @@ components:
       type: object
       description: Base type for error messages
       allOf:
-        - $ref: '#/components/schemas/genericErrorBase'
+        - $ref: '#/components/schemas/errorBaseType'
       required:
         - type
       properties:
         type:
           type: string
           const: genericError
-    genericErrorBase:
+    errorBaseType:
       type: object
       description: Base type for error messages
       required:
@@ -700,7 +700,7 @@ components:
     tasklistError:
       type: object
       allOf:
-        - $ref: '#/components/schemas/genericErrorBase'
+        - $ref: '#/components/schemas/errorBaseType'
       required:
         - type
       properties:
