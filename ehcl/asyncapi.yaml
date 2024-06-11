@@ -187,7 +187,7 @@ components:
           payload:
             messageId: 44a4e8f5-6aeb-4380-9a8d-b355b7f62b52
             type: sessionStatus
-            webSocketId: 3509584a-04e7-4756-bab0-0da4a84d0c12
+            webSocketId: dac7e9b3-2446-4b3c-9b67-dd8cfabffb4d
             phoneRegistered: false
 
     requestSMSCodeMessage:
@@ -363,8 +363,8 @@ components:
         - name: sendAPDU
           summary: sendAPDU message
           payload:
-            messageId: 3509584a-04e7-4756-bab0-0da4a84d0c12
-            cardSessionId: 38a5fb1b-f8e4-4132-8ec6-00fcd07bc5cc
+            messageId: ecc801d7-63d4-4f35-8ece-7b0f6309d2f0
+            cardSessionId: 3509584a-04e7-4756-bab0-0da4a84d0c12
             type: sendAPDU
             apdu: AIgAABiAJ2iBGZmZloNpD7bD27Eh0y1kmUtD3tkA
 
@@ -385,8 +385,8 @@ components:
           summary: sendAPDUResponse message
           payload:
             messageId: 02774740-35dc-460a-b7dc-b5d076b382c3
-            correlationId: 3509584a-04e7-4756-bab0-0da4a84d0c12
-            cardSessionId: 38a5fb1b-f8e4-4132-8ec6-00fcd07bc5cc
+            correlationId: ecc801d7-63d4-4f35-8ece-7b0f6309d2f0
+            cardSessionId: 3509584a-04e7-4756-bab0-0da4a84d0c12
             type: sendAPDUResponse
             responseApdu: kbNAK4xv4nyvwEO4fwgmZmnFnwGSb2+WDftJq2Sus0lwx5rQUQ9tq0Q1qKwlyjxpaAL0CSJ1gWRVQkfVzoYxxZAA
 
