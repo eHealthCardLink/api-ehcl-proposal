@@ -707,9 +707,3 @@ components:
         type:
           type: string
           const: tasklistError
-        tiStatus:
-          type: string
-          description: Response code from a TI service or connector
-        rootCause:
-          type: string
-          description: Root cause of the error
