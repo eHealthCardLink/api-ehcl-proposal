@@ -14,17 +14,19 @@ info:
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
+
 servers:
   production:
     host: to.be.configured
     protocol: wss
     description: Websocket Server
+
 channels:
   cardExchange:
     address: /
     messages:
-      sessionInformationMessage:
-        $ref: '#/components/messages/sessionInformationMessage'
+      sessionStatusMessage:
+        $ref: '#/components/messages/sessionStatusMessage'
       requestSMSCodeMessage:
         $ref: '#/components/messages/requestSMSCodeMessage'
       requestSMSCodeResponseMessage:
@@ -62,15 +64,16 @@ channels:
             version:
               type: string
               description: Version of the API required by the client
+
 operations:
-  sendSessionInformationMessage:
+  sendSessionStatusMessage:
     action: send
     title: Session Information
     summary: Send Session Information for the opened connection to the client (app)
     channel:
       $ref: '#/channels/cardExchange'
     messages:
-      - $ref: '#/channels/cardExchange/messages/sessionInformationMessage'
+      - $ref: '#/channels/cardExchange/messages/sessionStatusMessage'
   receiveRequestSMSCodeMessage:
     action: receive
     title: Receive request SMS Code
@@ -177,30 +180,28 @@ operations:
       $ref: '#/channels/cardExchange'
     messages:
       - $ref: '#/channels/cardExchange/messages/genericErrorMessage'
+
 components:
   messages:
-    sessionInformationMessage:
-      name: sessionInformationMessage
-      title: Session Information Message
-      summary: Information about the (re-)established session
+    sessionStatusMessage:
+      name: sessionStatusMessage
+      title: Session Status Message
+      summary: Status about the (re-)established session
       contentType: application/json
       payload:
-        type: array
-        items:
-          oneOf:
-            - $ref: '#/components/schemas/sessionInformationEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 1
-        maxItems: 1
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/sessionStatus'
       examples:
-        - name: sessionInformation
-          summary: sessionInformation message
+        - name: sessionStatus
+          summary: sessionStatus message
           payload:
-            - type: sessionInformation
-              payload:
-                webSocketId: 3509584a-04e7-4756-bab0-0da4a84d0c12
-                phoneRegistered: false
+            messageId: 44a4e8f5-6aeb-4380-9a8d-b355b7f62b52
+            type: sessionStatus
+            webSocketId: 3509584a-04e7-4756-bab0-0da4a84d0c12
+            phoneRegistered: false
+
     requestSMSCodeMessage:
       name: requestSMSCodeMessage
       title: Request SMS Code Message
@@ -484,20 +485,17 @@ components:
     genericErrorPayload:
       type: object
       description: Base64 encoded json payload of the error
-    sessionInformationEnvelope:
-      type: object
-      properties:
-        type:
-          type: string
-          const: sessionInformation
-        payload:
-          $ref: '#/components/schemas/sessionInformationPayload'
-    sessionInformationPayload:
+
+    sessionStatus:
       type: object
       description: Session Information object
       required:
+        - type
         - webSocketId
       properties:
+        type:
+          type: string
+          const: sessionStatus
         webSocketId:
           $ref: '#/components/schemas/webSocketId'
           description: The session ID chosen by the server for this WS channel
@@ -505,6 +503,7 @@ components:
           type: boolean
           default: false
           description: Indicator whether the phone number of the user has been registered already in this session
+
     requestSMSCodeEnvelope:
       type: object
       properties:
