@@ -208,98 +208,80 @@ components:
       summary: Request SMS code validation for a given phone number
       contentType: application/json
       payload:
-        type: array
-        items:
-          oneOf:
-            - $ref: '#/components/schemas/requestSMSCodeEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 1
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/requestSMSCode'
       examples:
         - name: requestSMSCode
           summary: requestSMSCode message
           payload:
-            - type: requestSMSCode
-              payload:
-                phoneNumber: +49 (175) 142 126 92
+            type: requestSMSCode
+            phoneNumber: +49 (175) 142 126 92
     requestSMSCodeResponseMessage:
       name: requestSMSCodeResponseMessage
       title: Request SMS Code Response Message
       summary: Response for requesting an SMS code validation for a given phone number
       contentType: application/json
       payload:
-        type: array
-        items:
-          oneOf:
-            - $ref: '#/components/schemas/requestSMSCodeResponseEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 3
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/correlationIdTrait'
+          - $ref: '#/components/schemas/requestSMSCodeResponse'
       examples:
         - name: requestSMSCodeResponse success
           summary: requestSMSCodeResponse message
           payload:
-            - type: requestSMSCodeResponse
-              payload:
-                resultCode: SUCCESS
+            type: requestSMSCodeResponse
+            resultCode: SUCCESS
         - name: requestSMSCodeResponse error
           summary: requestSMSCodeResponse message
           payload:
-            - type: requestSMSCodeResponse
-              payload:
-                resultCode: NUMBER_FROM_WRONG_COUNTRY
-                errorMessage: The provided number is not from Germany
+            type: requestSMSCodeResponse
+            resultCode: NUMBER_FROM_WRONG_COUNTRY
+            errorMessage: The provided number is not from Germany
+
     confirmSMSCodeMessage:
       name: confirmSMSCodeMessage
       title: Confirm SMS Code Message
       summary: Confirm SMS code validation for a given phone number
       contentType: application/json
       payload:
-        type: array
-        items:
-          oneOf:
-            - $ref: '#/components/schemas/confirmSMSCodeEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 1
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/confirmSMSCode'
       examples:
         - name: confirmSMSCode
           summary: confirmSMSCode message
           payload:
-            - type: confirmSMSCode
-              payload:
-                smsCode: 123456
+            type: confirmSMSCode
+            smsCode: 123456
     confirmSMSCodeResponseMessage:
       name: confirmSMSCodeResponseMessage
       title: Confirm SMS Code Response Message
       summary: Response for confirming an SMS code for a given phone number
       contentType: application/json
       payload:
-        type: array
-        items:
-          oneOf:
-            - $ref: '#/components/schemas/confirmSMSCodeResponseEnvelope'
-            - $ref: '#/components/schemas/cardSessionId'
-            - $ref: '#/components/schemas/correlationId'
-        minItems: 3
-        maxItems: 3
+        type: object
+        allOf:
+          - $ref: '#/components/schemas/messageIdTrait'
+          - $ref: '#/components/schemas/correlationIdTrait'
+          - $ref: '#/components/schemas/confirmSMSCodeResponse'
       examples:
         - name: confirmSMSCodeResponse success
           summary: confirmSMSCodeResponse message
           payload:
-            - type: confirmSMSCodeResponse
-              payload:
-                resultCode: SUCCESS
+            type: confirmSMSCodeResponse
+            resultCode: SUCCESS
         - name: confirmSMSCodeResponse error
           summary: confirmSMSCodeResponse message
           payload:
-            - type: confirmSMSCodeResponse
-              payload:
-                resultCode: TAN_RETRY_LIMIT_EXCEEDED
-                errorMessage: The SMS code has been entered wrong too many times
+            type: confirmSMSCodeResponse
+            resultCode: TAN_RETRY_LIMIT_EXCEEDED
+            errorMessage: The SMS code has been entered wrong too many times
+
     ICCSNReassignmentMessage:
       name: ICCSNReassignmentMessage
       title: Notify user af reassigned ICCSN
@@ -504,74 +486,58 @@ components:
           default: false
           description: Indicator whether the phone number of the user has been registered already in this session
 
-    requestSMSCodeEnvelope:
+    requestSMSCode:
       type: object
+      description: Request SMS Code Payload object
+      required:
+        - type
+        - phoneNumber
       properties:
         type:
           type: string
           const: requestSMSCode
-        payload:
-          $ref: '#/components/schemas/requestSMSCodePayload'
-    requestSMSCodePayload:
-      type: object
-      description: Request SMS Code Payload object
-      required:
-        - phoneNumber
-      properties:
         phoneNumber:
           type: string
           description: The phone number where the SMS code should be sent to
-    requestSMSCodeResponseEnvelope:
+    requestSMSCodeResponse:
       type: object
+      description: Request SMS Code Payload Response object
+      required:
+        - type
+        - resultCode
       properties:
         type:
           type: string
           const: requestSMSCodeResponse
-        payload:
-          $ref: '#/components/schemas/requestSMSCodeResponsePayload'
-    requestSMSCodeResponsePayload:
-      type: object
-      description: Request SMS Code Payload Response object
-      required:
-        - resultCode
-      properties:
         resultCode:
           $ref: '#/components/schemas/smsCodeResultType'
           description: Result code for SMS Code responses
         errorMessage:
           type: string
           description: Error message in case of an error
-    confirmSMSCodeEnvelope:
+    confirmSMSCode:
       type: object
+      description: Confirm SMS Code Payload object
+      required:
+        - type
+        - smsCode
       properties:
         type:
           type: string
           const: confirmSMSCode
-        payload:
-          $ref: '#/components/schemas/confirmSMSCodePayload'
-    confirmSMSCodePayload:
-      type: object
-      description: Confirm SMS Code Payload object
-      required:
-        - smsCode
-      properties:
         smsCode:
           type: string
           description: The SMS code to validate against the sent value
-    confirmSMSCodeResponseEnvelope:
+    confirmSMSCodeResponse:
       type: object
+      description: Confirm SMS Code Payload Response object
+      required:
+        - type
+        - resultCode
       properties:
         type:
           type: string
           const: confirmSMSCodeResponse
-        payload:
-          $ref: '#/components/schemas/confirmSMSCodeResponsePayload'
-    confirmSMSCodeResponsePayload:
-      type: object
-      description: Confirm SMS Code Payload Response object
-      required:
-        - resultCode
-      properties:
         resultCode:
           $ref: '#/components/schemas/smsCodeResultType'
           description: Result code for SMS Code responses
@@ -587,6 +553,7 @@ components:
         - TAN_INCORRECT
         - TAN_RETRY_LIMIT_EXCEEDED
         - UNKNOWN_ERROR
+
     ICCSNReassignmentEnvelope:
       type: object
       properties:
