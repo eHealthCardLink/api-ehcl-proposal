@@ -167,6 +167,7 @@ components:
       summary: Status about the (re-)established session
       contentType: application/json
       payload:
+        title: sessionStatusMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -186,6 +187,7 @@ components:
       summary: Request SMS code validation for a given phone number
       contentType: application/json
       payload:
+        title: requestSMSCodeMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -203,6 +205,7 @@ components:
       summary: Response for requesting an SMS code validation for a given phone number
       contentType: application/json
       payload:
+        title: requestSMSCodeResponseMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -231,6 +234,7 @@ components:
       summary: Confirm SMS code validation for a given phone number
       contentType: application/json
       payload:
+        title: confirmSMSCodeMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -248,6 +252,7 @@ components:
       summary: Response for confirming an SMS code for a given phone number
       contentType: application/json
       payload:
+        title: confirmSMSCodeResponseMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -278,6 +283,7 @@ components:
         This message is correlated to the registerEGK message.
       contentType: application/json
       payload:
+        title: ICCSNReassignmentMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -297,6 +303,7 @@ components:
       summary: Card data
       contentType: application/json
       payload:
+        title: registerEGKMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -322,6 +329,7 @@ components:
       summary: Finish message for eGK registration
       contentType: application/json
       payload:
+        title: registerEGKFinishMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -344,6 +352,7 @@ components:
       summary: Token to be signed
       contentType: application/json
       payload:
+        title: sendAPDUMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -364,6 +373,7 @@ components:
       summary: APDU from card to processing component
       contentType: application/json
       payload:
+        title: sendAPDUResponseMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -386,6 +396,7 @@ components:
       summary: Error retrieving PN
       contentType: application/json
       payload:
+        title: tasklistErrorMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
@@ -409,6 +420,7 @@ components:
       title: error
       contentType: application/json
       payload:
+        title: genericErrorMessage
         type: object
         allOf:
           - $ref: '#/components/schemas/messageIdTrait'
