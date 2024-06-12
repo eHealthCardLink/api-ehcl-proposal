@@ -463,7 +463,6 @@ components:
       properties:
         cardSessionId:
           $ref: '#/components/schemas/cardSessionId'
-      additionalProperties: false
 
     messageId:
       type: string
@@ -475,7 +474,6 @@ components:
       properties:
         messageId:
           $ref: '#/components/schemas/messageId'
-      additionalProperties: false
     correlationId:
       description: CorrelationId
       $ref: '#/components/schemas/messageId'
@@ -486,13 +484,11 @@ components:
       properties:
         correlationId:
           $ref: '#/components/schemas/correlationId'
-      additionalProperties: false
     correlationIdOptionalTrait:
       type: object
       properties:
         correlationId:
           $ref: '#/components/schemas/correlationId'
-      additionalProperties: false
 
     genericError:
       type: object
@@ -518,7 +514,6 @@ components:
         errorMessage:
           type: string
           description: Error message describing the error in more detail
-      additionalProperties: false
     genericErrorResultType:
       type: string
       enum:
