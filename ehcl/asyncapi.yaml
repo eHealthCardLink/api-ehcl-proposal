@@ -332,7 +332,7 @@ components:
         title: registerEGKFinishMessage
         type: object
         allOf:
-          - $ref: '#/components/schemas/registerEGK'
+          - $ref: '#/components/schemas/registerEGKFinish'
           - $ref: '#/components/schemas/messageIdTrait'
           - $ref: '#/components/schemas/correlationIdTrait'
           - $ref: '#/components/schemas/cardSessionTrait'
