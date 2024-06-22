@@ -8,9 +8,8 @@ info:
     = elektronische Gesundheitskarte) on one side and a server (i.e. application
     of type eHealth-CardLink) on the other side.
   contact:
-    name: Team Smartcard at gematik GmbH
-    url: https://www.gematik.de
-    email: smartcards@gematik.de
+    name: eHealth-CardLink-Taskforce
+    url: https://github.com/eHealthCardLink
   license:
     name: Apache 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0'
